@@ -1,0 +1,53 @@
+version: '3'
+services:
+  nginx:
+    build: nginx
+    depends_on:
+      - movim
+      - postgres
+    hostname: nginx
+    container_name: nginx
+    restart: always
+    env_file:
+     - movim.env
+    volumes:
+      - ./movim/www/:/var/www/movim/
+    ports:
+     - "80:80"
+     - "443:443"
+    networks:
+     - movim
+
+  movim:
+    build: movim
+    depends_on:
+      - postgres
+    hostname: movim
+    container_name: movim
+    restart: always
+    env_file:
+     - movim.env
+    volumes:
+      - ./movim/www/:/var/www/movim/
+    ports:
+     - "9000:9000"
+    networks:
+     - movim
+
+  postgres:
+    image: postgres:latest
+    hostname: postgres
+    container_name: postgres
+    restart: always
+    env_file:
+      - movim.env
+    volumes:
+      - ./postgres/data/:/var/lib/postgresql/data
+    ports:
+     - "5432:5432"
+    networks:
+     - movim
+
+networks:
+  movim:
+    driver: "bridge"
