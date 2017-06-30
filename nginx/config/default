@@ -7,6 +7,8 @@ server {
   listen 80;
   server_name {$NGINX_VHOST};
 
+  root index.php
+
   charset utf-8;
 
   location = /favicon.ico { log_not_found off; access_log off; }
@@ -16,9 +18,9 @@ server {
       allow all;
   }
 
-  location / {
-    return 301 http://$server_name/index.php;
-  }
+#  location / {
+#    return 301 http://$server_name/index.php;
+#  }
 
   location ~ [^/]\.php(/|$) {
 
