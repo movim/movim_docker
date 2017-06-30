@@ -17,4 +17,5 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 RUN chown -R www-data: /var/www/
 RUN chmod -R u+rwx /var/www/
 
+ENTRYPOINT ["/init.sh"]
 CMD ["nginx"]
