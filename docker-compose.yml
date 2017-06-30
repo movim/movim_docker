@@ -10,8 +10,8 @@ services:
     restart: always
     env_file:
      - movim.env
-    volumes:
-      - ./movim/www/:/var/www/movim/
+#    volumes:
+#      - ./movim/www/:/var/www/movim/
     ports:
      - "80:80"
      - "443:443"

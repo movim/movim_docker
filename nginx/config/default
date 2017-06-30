@@ -1,5 +1,5 @@
 upstream ws {
-  server movim:8080;
+  server movim:{$MOVIM_PORT};
 }
 
 server {
@@ -48,7 +48,7 @@ server {
       proxy_read_timeout 14400s;
       proxy_send_timeout 14400s;
   }
- 
+
   location ~ /\.ht { deny all; }
   location ^~ /movim/log/ { return 403; }
   location ^~ /movim/config/ { return 403; }
