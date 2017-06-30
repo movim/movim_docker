@@ -1,7 +1,3 @@
-upstream php {
-  server movim:9000;
-}
-
 upstream ws {
   server movim:{$MOVIM_PORT};
 }
@@ -33,7 +29,7 @@ server {
       }
 
       fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-      fastcgi_pass http://php;
+      fastcgi_pass movim:9000;
       fastcgi_index index.php;
       include fastcgi_params;
       fastcgi_param REMOTE_USER $remote_user;
