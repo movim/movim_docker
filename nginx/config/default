@@ -11,35 +11,39 @@ server {
   location = /favicon.ico { log_not_found off; access_log off; }
   location = /robots.txt  { log_not_found off; access_log off; }
 
+  location ~ /.well-known {
+      allow all;
+  }
+
   try_files $uri $uri/ /index.php;
 
   location ~ [^/]\.php(/|$) {
 
   if ($request_uri ~ "\/movim\/\?infos") {
-    return 403;
+      return 403;
   }
 
-    fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-    fastcgi_pass movim:9000;
-    fastcgi_index index.php;
-    include fastcgi_params;
-    fastcgi_param REMOTE_USER $remote_user;
-    fastcgi_param PATH_INFO $fastcgi_path_info;
-    fastcgi_param SCRIPT_FILENAME $request_filename;
+      fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+      fastcgi_pass movim:9000;
+      fastcgi_index index.php;
+      include fastcgi_params;
+      fastcgi_param REMOTE_USER $remote_user;
+      fastcgi_param PATH_INFO $fastcgi_path_info;
+      fastcgi_param SCRIPT_FILENAME $request_filename;
   }
 
   location /ws/ {
-    proxy_pass http://movim:8080/;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "Upgrade";
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_redirect off;
-    proxy_read_timeout 14400s;
-    proxy_send_timeout 14400s;
+      proxy_pass http://movim:8080/;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "Upgrade";
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto https;
+      proxy_redirect off;
+      proxy_read_timeout 14400s;
+      proxy_send_timeout 14400s;
   }
  
   location ~ /\.ht { deny all; }
