@@ -1,8 +1,8 @@
 $conf = [
     'type'        => 'pgsql',
-    'username'    => '$POSTGRES_USER',
-    'password'    => '$POSTGRES_PASSWORD',
+    'username'    => $_ENV['POSTGRES_USER'],
+    'password'    => $_ENV['POSTGRES_PASSWORD'],
     'host'        => 'postgres',
     'port'        => 5432,
-    'database'    => '$POSTGRES_DB'
+    'database'    => $_ENV['POSTGRES_DB']
 ];
