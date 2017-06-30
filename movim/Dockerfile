@@ -19,7 +19,7 @@ ADD scripts/ /opt/scripts/
 
 RUN git clone https://github.com/movim/movim.git /var/www/movim/
 
-RUN chown -R www-data: /var/www/ \
+RUN chown -R www-data:www-data /var/www/ \
     && chmod -R u+rwx /var/www/
 
 WORKDIR /var/www/movim/
@@ -28,4 +28,5 @@ USER www-data
 RUN curl -sS https://getcomposer.org/installer | php \
         && php composer.phar install
 
+USER root
 ENTRYPOINT ["/opt/scripts/init.sh"]

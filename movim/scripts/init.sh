@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp /opt/config/db.inc.php /var/www/config/db.inc.php
+cp /opt/config/db.inc.php /var/www/movim/config/db.inc.php
 
 service php7.0-fpm start
 

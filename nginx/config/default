@@ -1,7 +1,7 @@
 server {
   listen [::]:80;
   listen 80;
-  server_name {$MOVIM_DOMAIN} localhost;
+  server_name {$MOVIM_DOMAIN};
 
   charset utf-8;
 
