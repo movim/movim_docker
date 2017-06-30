@@ -1,3 +1,7 @@
+upstream php {
+  server movim:9000;
+}
+
 upstream ws {
   server movim:{$MOVIM_PORT};
 }
@@ -17,14 +21,10 @@ server {
   location ~ /.well-known {
       allow all;
   }
-  
+
   location / {
   	try_files $uri $uri/ /index.php$is_args$args;
   }
-
-#  location / {
-#    return 301 http://$server_name/index.php;
-#  }
 
   location ~ [^/]\.php(/|$) {
 
@@ -33,7 +33,7 @@ server {
       }
 
       fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-      fastcgi_pass movim:9000;
+      fastcgi_pass http://php;
       fastcgi_index index.php;
       include fastcgi_params;
       fastcgi_param REMOTE_USER $remote_user;
