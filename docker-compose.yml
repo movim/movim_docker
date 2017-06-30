@@ -1,7 +1,7 @@
 version: '3'
 services:
   nginx:
-    build: nginx
+    image: nginx
     depends_on:
       - movim
       - postgres
@@ -19,7 +19,7 @@ services:
      - movim
 
   movim:
-    build: movim
+    image: movim
     depends_on:
       - postgres
     hostname: movim
@@ -27,8 +27,8 @@ services:
     restart: always
     env_file:
      - movim.env
-    volumes:
-      - ./movim/www/:/var/www/movim/
+#    volumes:
+#      - ./movim/www/:/var/www/movim/
     ports:
      - "9000:9000"
     networks:

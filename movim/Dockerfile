@@ -12,11 +12,11 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN apt-get update && apt-get install -y ca-certificates
+
 ADD config/php-fpm.conf /etc/php/7.0/fpm/php-fpm.conf
 ADD config/www.conf /etc/php/7.0/fpm/pool.d/www.conf
-
-ADD config/ /opt/config/
-ADD scripts/ /opt/scripts/
+ADD config/php-cli.ini /etc/php/7.0/cli/php.ini
 
 RUN git clone https://github.com/movim/movim.git /var/www/movim/
 
@@ -30,4 +30,8 @@ RUN curl -sS https://getcomposer.org/installer | php \
         && php composer.phar install
 
 USER root
+
+ADD config/ /opt/config/
+ADD scripts/ /opt/scripts/
+
 ENTRYPOINT ["/opt/scripts/init.sh"]

@@ -1,3 +1,5 @@
+<?php
+
 $conf = [
     'type'        => 'pgsql',
     'username'    => $_ENV['POSTGRES_USER'],
