@@ -7,7 +7,7 @@ server {
   listen 80;
   server_name {$NGINX_VHOST};
 
-  root index.php
+  root index.php;
 
   charset utf-8;
 
@@ -16,6 +16,10 @@ server {
 
   location ~ /.well-known {
       allow all;
+  }
+  
+  location / {
+  	try_files $uri $uri/ /index.php$is_args$args;
   }
 
 #  location / {
