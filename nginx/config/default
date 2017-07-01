@@ -32,10 +32,12 @@ server {
       fastcgi_split_path_info ^(.+?\.php)(/.*)$;
       fastcgi_pass movim:9000;
       fastcgi_index index.php;
-      include fastcgi_params;
+      fastcgi_intercept_errors on;
+      fastcgi_request_buffering off;
       fastcgi_param REMOTE_USER $remote_user;
       fastcgi_param PATH_INFO $fastcgi_path_info;
       fastcgi_param SCRIPT_FILENAME /var/www/movim/$fastcgi_script_name;
+      include fastcgi_params;
   }
 
   location /ws/ {
