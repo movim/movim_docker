@@ -32,5 +32,4 @@ USER root
 ADD config/ /opt/config/
 ADD scripts/ /opt/scripts/
 
-VOLUME /var/www/movim/
 ENTRYPOINT ["/opt/scripts/init.sh"]
