@@ -2,6 +2,7 @@ version: '2'
 services:
   movim:
     build: movim
+    container_name: movim
     depends_on:
       - postgres
     hostname: movim
@@ -16,6 +17,7 @@ services:
 
   nginx:
     build: nginx
+    container_name: nginx
     depends_on:
       - movim
     hostname: nginx
@@ -32,6 +34,7 @@ services:
 
   postgres:
     image: postgres:9.6
+    container_name: postgres
     hostname: postgres
     restart: always
     env_file:
