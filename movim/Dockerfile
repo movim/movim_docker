@@ -25,7 +25,7 @@ WORKDIR /var/www/movim/
 USER www-data
 
 RUN curl -sS https://getcomposer.org/installer | php \
-        && php composer.phar install
+    && php composer.phar install
 
 USER root
 
