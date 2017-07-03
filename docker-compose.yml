@@ -43,8 +43,6 @@ services:
       - movim.env
     volumes:
       - ./postgres/data/:/var/lib/postgresql/data
-    ports:
-     - "5432:5432"
     networks:
      - movim
 
