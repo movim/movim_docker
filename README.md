@@ -37,4 +37,4 @@ Save your changes and run Docker Compose to raise the stack.
 ```
 docker-compose up -d
 ```
-The first time you run this, PostgreSQL will need a few moments to initialize properly - so be patient while it does so. You will notice some scary looking errors in the log or on screen if you didn't run Docker in detached mode, these are normal the first time you run it. After a few minutes point your browser towards the nginx VHOST you configured within the movim.env file and you should see your shiny new Movim Pod!
+The first time you run this, PostgreSQL will need a few moments to initialize properly - so be patient while it does so. You will notice some scary looking errors in the log or on screen if you didn't run Docker in detached mode, these are normal the first time you run it. After a few minutes point your browser towards the nginx VHOST you configured within the movim.env file and you should see your shiny new Movim Pod! Any subsequent times you start this container set will be much faster.
