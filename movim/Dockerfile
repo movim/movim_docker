@@ -18,8 +18,8 @@ ADD config/php-cli.ini /etc/php/7.0/cli/php.ini
 
 RUN git clone https://github.com/movim/movim.git /var/www/movim/
 
-RUN chown -R www-data: /var/www/ \
-    && chmod -R u+rwx /var/www/
+RUN chown -R www-data: /var/www \
+    && chmod -R u+rwX /var/www
 
 WORKDIR /var/www/movim/
 USER www-data
@@ -32,4 +32,5 @@ USER root
 ADD config/ /opt/config/
 ADD scripts/ /opt/scripts/
 
+VOLUME /var/www/movim/
 ENTRYPOINT ["/opt/scripts/init.sh"]

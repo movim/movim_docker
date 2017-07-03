@@ -1,27 +1,10 @@
-version: '3'
+version: '2'
 services:
-  nginx:
-    build: nginx
-    depends_on:
-      - movim
-      - postgres
-    hostname: nginx
-    container_name: nginx
-    restart: always
-    env_file:
-     - movim.env
-    ports:
-     - "80:80"
-     - "443:443"
-    networks:
-     - movim
-
   movim:
     build: movim
     depends_on:
       - postgres
     hostname: movim
-    container_name: movim
     restart: always
     env_file:
      - movim.env
@@ -31,10 +14,25 @@ services:
     networks:
      - movim
 
+  nginx:
+    build: nginx
+    depends_on:
+      - movim
+    hostname: nginx
+    restart: always
+    env_file:
+     - movim.env
+    volumes_from:
+     - movim:rw
+    ports:
+     - "80:80"
+     - "443:443"
+    networks:
+     - movim
+
   postgres:
-    image: postgres:latest
+    image: postgres:9.6
     hostname: postgres
-    container_name: postgres
     restart: always
     env_file:
       - movim.env
