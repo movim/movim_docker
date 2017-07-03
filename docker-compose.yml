@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   movim:
     build: movim
@@ -9,11 +9,10 @@ services:
     restart: always
     env_file:
      - movim.env
-    ports:
-     - "9000:9000"
-     - "8080:8080"
     networks:
      - movim
+    volumes:
+     - movim-volume:/var/www/movim:rw
 
   nginx:
     build: nginx
@@ -24,8 +23,8 @@ services:
     restart: always
     env_file:
      - movim.env
-    volumes_from:
-     - movim:rw
+    volumes:
+     - movim-volume:/var/www/movim:rw
     ports:
      - "80:80"
      - "443:443"
@@ -41,11 +40,12 @@ services:
       - movim.env
     volumes:
       - ./postgres/data/:/var/lib/postgresql/data
-    ports:
-     - "5432:5432"
     networks:
      - movim
 
 networks:
   movim:
     driver: "bridge"
+
+volumes:
+  movim-volume:
