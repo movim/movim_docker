@@ -6,7 +6,7 @@ You can find the official repository and download the source code [here](https:/
 
 ## Getting Started
 
-Firstly, clone this repository to a local directory on your server/workstation. I recommend /opt/docker/movim/ but anywhere is fine.
+Clone this repository to a local directory on your server/workstation. I recommend /opt/docker/movim/ but anywhere your user account has access to will probably be fine.
 ```
 git clone git@github.com:kawaii/movim_docker.git /opt/docker/movim/
 ```
