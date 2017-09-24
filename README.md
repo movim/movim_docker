@@ -24,6 +24,12 @@ MOVIM_PORT=8080
 # there isn't really much reason to change this
 MOVIM_INTERFACE=0.0.0.0
 
+# select a username for the admin interface
+MOVIM_ADMIN=adminuser
+
+# select a password for the admin interface
+MOVIM_PASSWORD=adminpassword
+
 # edit this value to your liking
 POSTGRES_USER=movim
 
