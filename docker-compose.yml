@@ -36,10 +36,15 @@ services:
     container_name: postgres
     hostname: postgres
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
     env_file:
       - movim.env
     volumes:
-      - ./postgres/data/:/var/lib/postgresql/data
+      - ${PWD}/postgres/data/:/var/lib/postgresql/data
     networks:
      - movim
 
