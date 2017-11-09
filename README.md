@@ -8,7 +8,7 @@ You can find the official repository and download the source code [here](https:/
 
 Clone this repository to a local directory on your server/workstation. I recommend /opt/docker/movim/ but anywhere your user account has access to will probably be fine.
 ```
-git clone git@github.com:kawaii/movim_docker.git /opt/docker/movim/
+git clone git@github.com:movim/movim_docker.git /opt/docker/movim/
 ```
 You should notice a file within the new /movim_docker/ directory called movim.env. You need to edit the default vaues contained within this file.
 ```
