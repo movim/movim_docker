@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 services:
   nginx:
     build: nginx
@@ -32,14 +32,19 @@ services:
      - movim
 
   postgres:
-    image: postgres:9.6
+    image: postgres:10.0
     container_name: postgres
     hostname: postgres
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
     env_file:
       - movim.env
     volumes:
-      - ./postgres/data/:/var/lib/postgresql/data
+      - ${PWD}/postgres/data/:/var/lib/postgresql/data
     networks:
      - movim
 

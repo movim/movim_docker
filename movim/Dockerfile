@@ -1,13 +1,13 @@
-FROM debian:9
+FROM debian:stretch-slim
 ENV DEBIAN_FRONTEND noninteractive
 
 MAINTAINER Kane Valentine - OpusVL <kane.valentine@opusvl.com>
 
 RUN apt-get update \
     && apt-get --no-install-suggests --no-install-recommends \
-       install -y git curl wget imagemagick libmagickwand-dev unzip php7.0-fpm \
+       install -y git curl wget unzip php7.0-fpm \
        php7.0-cli php7.0-mcrypt php7.0-gd php7.0-imagick php7.0-pgsql \
-       php-memcached php7.0-mbstring php7.0-xml php7.0-curl ca-certificates \
+       php7.0-mbstring php7.0-xml php7.0-curl ca-certificates \
     && mkdir /run/php \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

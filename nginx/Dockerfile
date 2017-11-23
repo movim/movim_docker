@@ -1,4 +1,4 @@
-FROM debian:9
+FROM debian:stretch-slim
 ENV DEBIAN_FRONTEND noninteractive
 
 MAINTAINER Kane Valentine - OpusVL <kane.valentine@opusvl.com>
