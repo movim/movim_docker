@@ -16,7 +16,7 @@ RUN set -ex; \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-	docker-php-ext-install gd pgsql; \
+	docker-php-ext-install gd pgsql zip; \
 	\
 	pecl install imagick-3.4.3 zmq-beta; \
 	docker-php-ext-enable imagick zmq
