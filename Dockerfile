@@ -18,3 +18,15 @@ RUN set -ex; \
 	\
 	pecl install zmq-beta; \
 	docker-php-ext-enable zmq
+
+VOLUME /var/www/html
+
+ENV MOVIM_VERSION 0.13
+ENV MOVIM_SHA1 dfc083bb3d94549e162da451e883ec1e8889905d
+
+RUN set -ex; \
+	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
+	echo "$MOVIM_SHA1 *movim.tar.gz" | sha1sum -c -; \
+	tar -xzf movim.tar.gz -C /usr/src/; \
+	rm movim.tar.gz; \
+	chown -R www-data:www-data /usr/src/movim-${MOVIM_VERSION}
