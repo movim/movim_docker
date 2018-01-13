@@ -30,3 +30,10 @@ RUN set -ex; \
 	tar -xzf movim.tar.gz -C /usr/src/; \
 	rm movim.tar.gz; \
 	chown -R www-data:www-data /usr/src/movim-${MOVIM_VERSION}
+
+WORKDIR /usr/src/movim-${MOVIM_VERSION}
+
+RUN curl -sS https://getcomposer.org/installer | php \
+    && php composer.phar install
+
+WORKDIR /var/www/html
