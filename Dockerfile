@@ -10,6 +10,7 @@ RUN set -ex; \
 		libpng-dev \
 		libzmq3-dev \
 		libpq-dev \
+		git \
 	; \
 	apt-get clean; \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
