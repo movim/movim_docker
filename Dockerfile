@@ -5,6 +5,7 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	apt-get install -y --no-install-suggests --no-install-recommends \
+		libmagickwand-dev \
 		libjpeg-dev \
 		libpng-dev \
 		libzmq3-dev \
@@ -16,8 +17,8 @@ RUN set -ex; \
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	docker-php-ext-install gd pgsql; \
 	\
-	pecl install zmq-beta; \
-	docker-php-ext-enable zmq
+	pecl install imagick-3.4.3 zmq-beta; \
+	docker-php-ext-enable imagick zmq
 
 VOLUME /var/www/html
 
