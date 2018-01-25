@@ -5,21 +5,37 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	apt-get install -y --no-install-suggests --no-install-recommends \
+		git \
+	; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	\
+	apt-get install -y --no-install-suggests --no-install-recommends \
 		libmagickwand-dev \
 		libjpeg-dev \
 		libpng-dev \
 		libzmq3-dev \
 		libpq-dev \
-		git \
 	; \
-	apt-get clean; \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	docker-php-ext-install gd pdo_pgsql pgsql zip; \
 	\
 	pecl install imagick-3.4.3 zmq-beta; \
-	docker-php-ext-enable imagick zmq
+	docker-php-ext-enable imagick zmq; \
+	\
+	apt-mark auto '.*' > /dev/null; \
+	apt-mark manual $savedAptMark; \
+	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+		| awk '/=>/ { print $3 }' \
+		| sort -u \
+		| xargs -r dpkg-query -S \
+		| cut -d: -f1 \
+		| sort -u \
+		| xargs -rt apt-mark manual; \
+	\
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	rm -rf /var/lib/apt/lists/*
 
 VOLUME /var/www/html
 
