@@ -16,7 +16,7 @@ RUN set -ex; \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-	docker-php-ext-install gd pgsql zip; \
+	docker-php-ext-install gd pdo_pgsql pgsql zip; \
 	\
 	pecl install imagick-3.4.3 zmq-beta; \
 	docker-php-ext-enable imagick zmq
@@ -39,3 +39,11 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && php composer.phar install --no-suggest --optimize-autoloader
 
 WORKDIR /var/www/html
+
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["php-fpm"]
+
+#USER www-data
+CMD ["sh", "-c", "php", "daemon.php", "start", "--url=$MOVIM_DOMAIN", "--port=$MOVIM_PORT", "--interface=$MOVIM_INTERFACE", "--verbose", "--debug"]
