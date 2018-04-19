@@ -59,7 +59,4 @@ WORKDIR /var/www/html
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD ["php-fpm"]
-
-#USER www-data
-CMD ["sh", "-c", "php", "daemon.php", "start", "--url=$MOVIM_DOMAIN", "--port=$MOVIM_PORT", "--interface=$MOVIM_INTERFACE", "--verbose", "--debug"]
+CMD ["su", "-s", "/bin/sh", "-c", "php daemon.php start --url=$MOVIM_DOMAIN --port=$MOVIM_PORT --interface=$MOVIM_INTERFACE --verbose --debug", "www-data"]
