@@ -1,5 +1,8 @@
 FROM php:7.2-fpm
-MAINTAINER Kane Valentine <kane@cute.im>
+
+LABEL vendor="The Movim Team"
+LABEL version="0.13"
+LABEL maintainer="Kane Valentine <kane@cute.im>"
 
 RUN set -ex; \
 	\
