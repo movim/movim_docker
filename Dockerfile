@@ -7,13 +7,13 @@ LABEL maintainer="Kane Valentine <kane@cute.im>"
 RUN set -ex; \
 	\
 	apt-get update; \
-	apt-get install -y --no-install-suggests --no-install-recommends \
+	apt-get install -qq --no-install-suggests --no-install-recommends \
 		git \
 	; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
 	\
-	apt-get install -y --no-install-suggests --no-install-recommends \
+	apt-get install -qq --no-install-suggests --no-install-recommends \
 		libmagickwand-dev \
 		libjpeg-dev \
 		libpng-dev \
