@@ -1,46 +1,62 @@
-# movim_docker
+# Quick reference
 
-Movim is a decentralized social network, written in PHP and HTML5 and based on the XMPP standard protocol.
+-	**Where to get help**:  
+	the Movim XMPP MUC - movim@conference.movim.eu
 
-You can find the official repository and download the source code [here](https://github.com/movim/movim). This repository purely contains a Docker Compose solution to get the client quickly set up anywhere. Running this docker-compose file will build a stack comprising an nginx container, a PHP container (where Movim itself resides) and a PostgreSQL container. This setup assumes that you already have an XMPP server such as [ejabberd](https://www.ejabberd.im/) or [Prosody](https://www.prosody.im/) running somewhere else.
+-	**Where to file issues**:  
+	[https://github.com/movim/movim_docker/issues](https://github.com/movim/movim_docker/issues)
 
-## Getting Started
+# What is Movim?
 
-Clone this repository to a local directory on your server/workstation. I recommend /opt/docker/movim/ but anywhere your user account has access to will probably be fine.
+Movim is a distributed social network built on top of XMPP, a popular open standards communication protocol. Movim is a free and open source software licensed under the AGPL. It can be accessed using existing XMPP clients and Jabber accounts. Learn more at [movim.eu](https://movim.eu/).
+
+> [wikipedia.org/wiki/Movim](https://en.wikipedia.org/wiki/Movim)
+
+![logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Movim-logo.svg/354px-Movim-logo.svg.png)
+
+# How to use this image
+
+```console
+$ docker container run movim/movim:latest
 ```
-git clone git@github.com:movim/movim_docker.git /opt/docker/movim/
+
+This image only provides a Movim service container running PHP7.X-FPM. There are no database, cache or nginx container(s) provided, you'll need to use Docker Compose or Stack to wrange those additional services to your Movim instance.
+
+## ... via [`docker stack deploy`](https://docs.docker.com/engine/reference/commandline/stack_deploy/) or [`docker-compose`](https://github.com/docker/compose)
+
+Example `stack.yml` for `movim`:
+
+```yaml
+services:
+  movim:
+    environment:
+      MOVIM_ADMIN: admin
+      MOVIM_PASSWORD: password
+      MOVIM_DOMAIN: http://localhost
+      MOVIM_PORT: 8080
+      MOVIM_INTERFACE: 0.0.0.0
+      POSTGRES_DB: movim
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: movim
+      POSTGRES_PASSWORD: changeme
+    image: movim/movim:latest
+    volumes:
+    - ${PWD}/movim:/var/www/html:rw
+  nginx:
+    image: nginx:mainline
+    ports:
+    - published: 80
+      target: 80
+    volumes:
+    - ${PWD}/movim:/var/www/html:ro
+  postgresql:
+    environment:
+      POSTGRES_DB: movim
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_USER: movim
+    image: postgres:10.3
+    volumes:
+    - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
+version: '3.6'
 ```
-You should notice a file within the new /movim_docker/ directory called movim.env. You need to edit the default vaues contained within this file.
-```
-# the domain or subdomain where your Movim instance is served from
-NGINX_VHOST=localhost
-
-# copy the value you wrote above here, keeping the http:// prefix and trailing slash
-MOVIM_DOMAIN=http://localhost/
-
-# there isn't really much reason to change this
-MOVIM_PORT=8080
-
-# there isn't really much reason to change this
-MOVIM_INTERFACE=0.0.0.0
-
-# select a username for the admin interface
-MOVIM_ADMIN=adminuser
-
-# select a password for the admin interface
-MOVIM_PASSWORD=adminpassword
-
-# edit this value to your liking
-POSTGRES_USER=movim
-
-# please change this, please!
-POSTGRES_PASSWORD=movimpassword
-
-# edit this value to your liking
-POSTGRES_DB=movim
-```
-Save your changes and run Docker Compose to raise the stack.
-```
-docker-compose up -d
-```
-The first time you run this, PostgreSQL will need a few moments to initialize properly - so be patient while it does so. You will notice some scary looking errors in the log or on screen if you didn't run Docker in detached mode, these are normal the first time you run it. After a few minutes point your browser towards the nginx VHOST you configured within the movim.env file and you should see your shiny new Movim Pod! Any subsequent times you start this container set will be much faster.
