@@ -35,11 +35,12 @@ services:
       MOVIM_DOMAIN: http://localhost
       MOVIM_PORT: 8080
       MOVIM_INTERFACE: 0.0.0.0
-      POSTGRES_DB: movim
-      POSTGRES_HOST: postgresql
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: movim
-      POSTGRES_PASSWORD: changeme
+      MOVIM_DB_TYPE: pgsql
+      MOVIM_DB_DB: movim
+      MOVIM_DB_HOST: postgresql
+      MOVIM_DB_PORT: 5432
+      MOVIM_DB_USER: movim
+      MOVIM_DB_PASSWORD: changeme
     image: movim/movim:latest
     volumes:
     - ${PWD}/movim:/var/www/html:rw

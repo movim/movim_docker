@@ -14,12 +14,12 @@ fi
 cat <<EOT > config/db.inc.php
 <?php
 \$conf = [
-    'type'        => 'pgsql',
-    'database'    => '$POSTGRES_DB',
-    'host'        => '$POSTGRES_HOST',
-    'port'        => '$POSTGRES_PORT',
-    'username'    => '$POSTGRES_USER',
-    'password'    => '$POSTGRES_PASSWORD',
+    'type'        => '$MOVIM_DB_TYPE',
+    'database'    => '$MOVIM_DB_DB',
+    'host'        => '$MOVIM_DB_HOST',
+    'port'        => '$MOVIM_DB_PORT',
+    'username'    => '$MOVIM_DB_USER',
+    'password'    => '$MOVIM_DB_PASSWORD',
 ];
 EOT
 
