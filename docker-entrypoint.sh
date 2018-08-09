@@ -25,7 +25,9 @@ EOT
 
 chown -R www-data:www-data $PWD && chmod -R u+rwx $PWD
 
-php mud.php db --set
-php mud.php config --username=$MOVIM_ADMIN --password=$MOVIM_PASSWORD
+php vendor/bin/phinx migrate
+php daemon.php config --username=$MOVIM_ADMIN --password=$MOVIM_PASSWORD
+
+php-fpm --daemonize
 
 exec "$@"
