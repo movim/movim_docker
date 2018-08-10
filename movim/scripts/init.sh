@@ -8,8 +8,8 @@ sed -i s/'{$POSTGRES_DB}'/$POSTGRES_DB/ /var/www/movim/config/db.inc.php
 
 service php7.0-fpm start
 
-php mud.php db --set # Adapt Movim schema if required
-php mud.php config --username=$MOVIM_ADMIN --password=$MOVIM_PASSWORD # Set credentials for the admin interface
+php vendor/bin/phinx migrate # perform database migrations
+php daemon.php config --username=$MOVIM_ADMIN --password=$MOVIM_PASSWORD # Set credentials for the admin interface
 
 chown -R www-data:www-data /var/www \
 && chmod -R u+rwx /var/www
