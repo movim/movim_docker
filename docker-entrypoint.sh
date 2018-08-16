@@ -30,4 +30,5 @@ php daemon.php config --username=$MOVIM_ADMIN --password=$MOVIM_PASSWORD
 
 php-fpm --daemonize
 
+sleep 5
 exec "$@"
