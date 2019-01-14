@@ -44,7 +44,7 @@ services:
     volumes:
     - ${PWD}/movim:/var/www/html:rw
   nginx:
-    image: nginx:mainline
+    image: nginx:mainline-alpine
     ports:
     - published: 80
       target: 80
@@ -55,8 +55,8 @@ services:
       POSTGRES_DB: movim
       POSTGRES_PASSWORD: changeme
       POSTGRES_USER: movim
-    image: postgres:10.3
+    image: postgres:11.1-alpine
     volumes:
     - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
-version: '3.6'
+version: '3.7'
 ```
