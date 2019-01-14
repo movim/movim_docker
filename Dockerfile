@@ -1,7 +1,6 @@
 FROM php:7.2-fpm
 
-LABEL vendor="The Movim Team"
-LABEL version="0.14alpha6"
+LABEL version="0.14.1rc4"
 LABEL maintainer="Kane Valentine <kane@cute.im>"
 
 RUN set -ex; \
@@ -9,6 +8,7 @@ RUN set -ex; \
 	apt-get update; \
 	apt-get install -qq --no-install-suggests --no-install-recommends \
 		git \
+		unzip \
 	; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
@@ -42,8 +42,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.14alpha6
-ENV MOVIM_SHA1 a35aa955c110a33f7a87e1e87836cf8425059fda
+ENV MOVIM_VERSION 0.14.1rc4
+ENV MOVIM_SHA1 73d7ade72ccfdbf3383374964577c4bf9adaf068
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
