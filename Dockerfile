@@ -1,6 +1,6 @@
-FROM php:7.2-fpm
+FROM php:7.3-fpm
 
-LABEL version="0.14.1rc4"
+LABEL version="0.14.2rc7"
 LABEL maintainer="Kane Valentine <kane@cute.im>"
 
 RUN set -ex; \
@@ -17,15 +17,15 @@ RUN set -ex; \
 		libmagickwand-dev \
 		libjpeg-dev \
 		libpng-dev \
-		libzmq3-dev \
 		libpq-dev \
+		libzip-dev \
 	; \
 	\
 	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
 	docker-php-ext-install gd pdo_pgsql pgsql zip; \
 	\
-	pecl install imagick-3.4.3 zmq-beta; \
-	docker-php-ext-enable imagick zmq; \
+	pecl install imagick-3.4.4; \
+	docker-php-ext-enable imagick; \
 	\
 	apt-mark auto '.*' > /dev/null; \
 	apt-mark manual $savedAptMark; \
@@ -42,8 +42,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.14.1rc4
-ENV MOVIM_SHA1 73d7ade72ccfdbf3383374964577c4bf9adaf068
+ENV MOVIM_VERSION 0.14.2rc7
+ENV MOVIM_SHA1 9fee4ff0f57a1be87185a09a055d742a4be10840
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
