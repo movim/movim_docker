@@ -17,11 +17,12 @@ RUN set -ex; \
 		libmagickwand-dev \
 		libjpeg-dev \
 		libpng-dev \
+		libwebp-dev \
 		libpq-dev \
 		libzip-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr; \
 	docker-php-ext-install gd pdo_pgsql pgsql zip; \
 	\
 	pecl install imagick-3.4.4; \
