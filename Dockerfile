@@ -1,6 +1,6 @@
 FROM php:7.3-fpm
 
-LABEL version="0.14.2rc7"
+LABEL version="0.15"
 LABEL maintainer="Kane Valentine <kane@cute.im>"
 
 RUN set -ex; \
@@ -43,8 +43,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.14.2rc7
-ENV MOVIM_SHA1 9fee4ff0f57a1be87185a09a055d742a4be10840
+ENV MOVIM_VERSION 0.15
+ENV MOVIM_SHA1 12bbece7077d7e3738452800223e74006d9b20e5
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
