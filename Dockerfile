@@ -1,8 +1,5 @@
 FROM php:7.3-fpm
 
-LABEL version="0.15"
-LABEL maintainer="Kane Valentine <kane@cute.im>"
-
 RUN set -ex; \
 	\
 	apt-get update; \
