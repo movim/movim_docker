@@ -40,14 +40,14 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.17.1
-ENV MOVIM_SHA1 8e399f9ab2acc53659dd1df64383e70310eeaa9a
+ENV MOVIM_VERSION master
+ENV MOVIM_SHA1 5b6bf3931cd1d6b3079645bfa0588fd6dd712434
 
 RUN set -ex; \
-	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
-	echo "$MOVIM_SHA1 *movim.tar.gz" | sha1sum -c -; \
+	curl -o movim.zip -fSL "https://github.com/movim/movim/archive/master.zip"; \
+	echo "$MOVIM_SHA1 *movim.zip" | sha1sum -c -; \
 	tar -xzf movim.tar.gz -C /usr/src/; \
-	rm movim.tar.gz; \
+	rm movim.zip; \
 	chown -R www-data:www-data /usr/src/movim-${MOVIM_VERSION}
 
 WORKDIR /usr/src/movim-${MOVIM_VERSION}
