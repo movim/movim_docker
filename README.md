@@ -1,4 +1,5 @@
-# Unoffical Movim Docker Images for bloody edge Releases - No WARRANTY!
+# Unoffical Movim Docker Images for bloody edge Releases - No WARRANTY! 
+## You might want to contact me: thorsten@emevth.no-ip.biz
 
 # Quick reference
 
