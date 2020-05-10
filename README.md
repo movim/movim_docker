@@ -1,4 +1,4 @@
-# Unoffical Movim Docker Images for bloody edge Releases
+# Unoffical Movim Docker Images for bloody edge Releases - No WARRANTY!
 
 # Quick reference
 
