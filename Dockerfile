@@ -53,7 +53,7 @@ RUN set -ex; \
 WORKDIR /usr/src/movim-${MOVIM_VERSION}
 
 RUN curl -sS https://getcomposer.org/installer | php \
-    && php composer.phar install --no-suggest --optimize-autoloader
+    && php composer.phar install
 
 WORKDIR /var/www/html
 
