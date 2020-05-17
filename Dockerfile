@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 RUN set -ex; \
 	\
@@ -19,7 +19,7 @@ RUN set -ex; \
 		libzip-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr; \
+	docker-php-ext-configure gd --with-jpeg=/usr --with-webp=/usr; \
 	docker-php-ext-install gd pdo_pgsql pgsql zip; \
 	\
 	pecl install imagick-3.4.4; \
@@ -40,8 +40,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.17
-ENV MOVIM_SHA1 b54fb4f2f7d2e655f4788e07a7940a87f82be0f8
+ENV MOVIM_VERSION 0.18rc3
+ENV MOVIM_SHA1 c4812ae6f3ba54597d3710b96ca36ad406d2c0d8
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
