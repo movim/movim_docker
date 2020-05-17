@@ -40,7 +40,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: movim
       POSTGRES_PASSWORD: changeme
-    image: movim/movim:0.17
+    image: movim/movim:0.18rc3
     volumes:
     - ${PWD}/movim:/var/www/html:rw
   nginx:
@@ -55,7 +55,7 @@ services:
       POSTGRES_DB: movim
       POSTGRES_PASSWORD: changeme
       POSTGRES_USER: movim
-    image: postgres:11.4-alpine
+    image: postgres:11.8-alpine
     volumes:
     - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
 version: '3.7'
