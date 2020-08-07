@@ -1,9 +1,9 @@
 # Quick reference
 
--	**Where to get help**:  
+-	**Where to get help**:
 	the Movim XMPP MUC - movim@conference.movim.eu
 
--	**Where to file issues**:  
+-	**Where to file issues**:
 	[https://github.com/movim/movim_docker/issues](https://github.com/movim/movim_docker/issues)
 
 # What is Movim?
@@ -40,7 +40,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: movim
       POSTGRES_PASSWORD: changeme
-    image: movim/movim:0.18rc9
+    image: movim/movim:0.18rc12
     volumes:
     - ${PWD}/movim:/var/www/html:rw
   nginx:
