@@ -40,8 +40,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.18rc12
-ENV MOVIM_SHA1 74770f7e900e24cadb764838ec39a3f6c926247b
+ENV MOVIM_VERSION 0.18rc13
+ENV MOVIM_SHA1 7c96ddf9da28e1e0b363ddd646011cc5c7f585b1
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
