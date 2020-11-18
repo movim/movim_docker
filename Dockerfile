@@ -40,8 +40,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.18.1rc3
-ENV MOVIM_SHA1 d0e6a879996a6adb0c2d6d96e159942ae8b45a7e
+ENV MOVIM_VERSION 0.18.1rc5
+ENV MOVIM_SHA1 c7ee0cb69226e25d3b64c0bf0ede985afc09ea72
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
@@ -52,7 +52,7 @@ RUN set -ex; \
 
 WORKDIR /usr/src/movim-${MOVIM_VERSION}
 
-RUN curl -sS https://getcomposer.org/installer | php -- --1 \
+RUN curl -sS https://getcomposer.org/installer | php \
     && php composer.phar install --optimize-autoloader
 
 WORKDIR /var/www/html
