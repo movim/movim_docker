@@ -40,7 +40,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: movim
       POSTGRES_PASSWORD: changeme
-    image: movim/movim:0.18.1rc0
+    image: movim/movim:0.18.1rc8
     volumes:
     - ${PWD}/movim:/var/www/html:rw
   nginx:
@@ -50,13 +50,15 @@ services:
       target: 80
     volumes:
     - ${PWD}/movim:/var/www/html:ro
+    - ${PWD}/nginx:/etc/nginx/conf.d:ro
   postgresql:
     environment:
       POSTGRES_DB: movim
       POSTGRES_PASSWORD: changeme
       POSTGRES_USER: movim
-    image: postgres:12.4-alpine
+    image: postgres:13.1-alpine
     volumes:
     - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
 version: '3.7'
 ```
+Please note, you'll need to create the `nginx/default.conf` file yourself, to be mounted into the `nginx` container. You can find a good example configuration [here](https://gist.githubusercontent.com/kawaii/468f24135bc5cf817b922d8491276771/raw/bc0a881c5a505ffa677655f515502533d33b7174/movim.conf).
