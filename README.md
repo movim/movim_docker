@@ -43,6 +43,7 @@ services:
     image: movim/movim:0.18.1rc8
     volumes:
     - ${PWD}/movim:/var/www/html:rw
+    
   nginx:
     image: nginx:mainline-alpine
     ports:
@@ -51,6 +52,7 @@ services:
     volumes:
     - ${PWD}/movim:/var/www/html:ro
     - ${PWD}/nginx:/etc/nginx/conf.d:ro
+    
   postgresql:
     environment:
       POSTGRES_DB: movim
