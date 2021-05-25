@@ -16,12 +16,6 @@ Movim is a distributed social network built on top of XMPP, a popular open stand
 
 # How to use this image
 
-```console
-$ docker container run movim/movim:latest
-```
-
-This image only provides a Movim service container running PHP7.X-FPM. There are no database, cache or nginx container(s) provided, you'll need to use Docker Compose or Stack to wrange those additional services to your Movim instance.
-
 ## ... via [`docker stack deploy`](https://docs.docker.com/engine/reference/commandline/stack_deploy/) or [`docker-compose`](https://github.com/docker/compose)
 
 Example `stack.yml` for `movim`:
@@ -64,3 +58,11 @@ services:
 version: '3.7'
 ```
 Please note, you'll need to create the `nginx/default.conf` file yourself, to be mounted into the `nginx` container. You can find a good example configuration [here](https://gist.githubusercontent.com/kawaii/468f24135bc5cf817b922d8491276771/raw/bc0a881c5a505ffa677655f515502533d33b7174/movim.conf).
+
+# Creating an Admin User
+
+After you've sucessfully logged in to your Movim Pod, run the following Docker Compose exec command;
+
+```
+docker-compose exec movim php daemon.php setAdmin example@movim.eu
+```
