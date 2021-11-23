@@ -4,7 +4,6 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	apt-get install -qq --no-install-suggests --no-install-recommends \
-		git \
 		unzip \
 	; \
 	\
