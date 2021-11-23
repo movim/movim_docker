@@ -21,7 +21,7 @@ RUN set -ex; \
 	docker-php-ext-configure gd --with-jpeg=/usr --with-webp=/usr; \
 	docker-php-ext-install gd pdo_pgsql pgsql zip; \
 	\
-	pecl install imagick-3.4.4; \
+	pecl install imagick-3.5.1; \
 	docker-php-ext-enable imagick; \
 	\
 	apt-mark auto '.*' > /dev/null; \
