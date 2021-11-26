@@ -24,8 +24,6 @@ Example `stack.yml` for `movim`:
 services:
   movim:
     environment:
-      MOVIM_ADMIN: admin
-      MOVIM_PASSWORD: password
       MOVIM_DOMAIN: http://localhost
       MOVIM_PORT: 8080
       MOVIM_INTERFACE: 0.0.0.0
