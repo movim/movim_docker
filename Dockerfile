@@ -4,7 +4,6 @@ RUN set -ex; \
 	\
 	apt-get update; \
 	apt-get install -qq --no-install-suggests --no-install-recommends \
-		git \
 		unzip \
 	; \
 	\
@@ -22,7 +21,7 @@ RUN set -ex; \
 	docker-php-ext-configure gd --with-jpeg=/usr --with-webp=/usr; \
 	docker-php-ext-install gd pdo_pgsql pgsql zip; \
 	\
-	pecl install imagick-3.4.4; \
+	pecl install imagick-3.5.1; \
 	docker-php-ext-enable imagick; \
 	\
 	apt-mark auto '.*' > /dev/null; \
@@ -40,12 +39,12 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.19.1rc6
-ENV MOVIM_SHA1 ec8eb54f406e4f240bf23e7a105e04a2bcbd97f4
+ENV MOVIM_VERSION 0.20rc1
+ENV MOVIM_SHA512 4ef81f83ff7ebc838029e4107e0a191956c86398f7d51f69eb087521103ca2e8c6cf1c516d09415c229c04fa6e97b5e3697acf2d92703b69fdbb0b05d84cff03
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
-	echo "$MOVIM_SHA1 *movim.tar.gz" | sha1sum -c -; \
+	echo "$MOVIM_SHA512 *movim.tar.gz" | sha512sum -c -; \
 	tar -xzf movim.tar.gz -C /usr/src/; \
 	rm movim.tar.gz; \
 	chown -R www-data:www-data /usr/src/movim-${MOVIM_VERSION}
