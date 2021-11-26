@@ -11,6 +11,33 @@ if ! [ -e daemon.php -a -e public/index.php ]; then
 	echo >&2 "Complete! Movim ${MOVIM_VERSION} has been successfully copied to $PWD"
 fi
 
+if [ -z "${POSTGRES_PASSWORD:-}" ]; then
+    if [ -z "${POSTGRES_PASSWORD_FILE:-}" ]; then
+       echo Either POSTGRES_PASSWORD or POSTGRES_PASSWORD_FILE must be set 
+       exit 1
+    fi
+
+    POSTGRES_PASSWORD=$(<"$POSTGRES_PASSWORD_FILE")
+fi
+
+if [ -z "${POSTGRES_USER:-}" ]; then
+    if [ -z "${POSTGRES_USER_FILE:-}" ]; then
+       echo Either POSTGRES_USER or POSTGRES_USER_FILE must be set 
+       exit 1
+    fi
+
+    POSTGRES_USER=$(<"$POSTGRES_USER_FILE")
+fi
+
+if [ -z "${POSTGRES_DB:-}" ]; then
+    if [ -z "${POSTGRES_DB_FILE:-}" ]; then
+       echo Either POSTGRES_DB or POSTGRES_DB_FILE must be set 
+       exit 1
+    fi
+
+    POSTGRES_DB=$(<"$POSTGRES_DB_FILE")
+fi
+
 cat <<EOT > config/db.inc.php
 <?php
 \$conf = [
