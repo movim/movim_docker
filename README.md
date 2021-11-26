@@ -59,6 +59,11 @@ version: '3.7'
 ```
 Please note, you'll need to create the `nginx/default.conf` file yourself, to be mounted into the `nginx` container. You can find a good example configuration [here](https://gist.githubusercontent.com/kawaii/468f24135bc5cf817b922d8491276771/raw/bc0a881c5a505ffa677655f515502533d33b7174/movim.conf).
 
+You can also specify certain environment variables to be loaded from a file, by appending `_FILE` to the end. This is common practice for handling secrets in Docker; see [Docker Secrets](https://www.docker.com/blog/docker-secrets-management/) for more info. The only valid `_FILE` environment variables are the following
+* `$POSTGRES_DB_FILE`
+* `$POSTGRES_USER_FILE`
+* `$POSTGRES_PASSWORD_FILE`
+
 # Creating an Admin User
 
 After you've sucessfully logged in to your Movim Pod, run the following Docker Compose exec command;
