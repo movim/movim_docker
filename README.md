@@ -32,7 +32,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: movim
       POSTGRES_PASSWORD: changeme
-    image: movim/movim:0.20rc3
+    image: movim/movim:0.20rc4
     volumes:
     - ${PWD}/movim:/var/www/html:rw
 
