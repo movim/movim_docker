@@ -25,7 +25,7 @@ Movim is a distributed social network built on top of XMPP, a popular open stand
 
 ## Tags
 
-The image name is `ghcr.io/movim/movim_docker`. Images are available from tag `v0.21rc3` onwards. The first image build has a `-r0` suffix. For older image versions, see [DockerHub](https://hub.docker.com/r/movim/movim).
+The image name is `ghcr.io/movim/movim`. Images are available from tag `v0.21rc3` onwards. The first image build has a `-r0` suffix. For older image versions, see [DockerHub](https://hub.docker.com/r/movim/movim).
 
 Experimental Alpine based images have an `-alpine` suffix.
 
@@ -83,7 +83,7 @@ services:
     - ${PWD}/movim:/var/www/html:rw
 =======
     ### general settings
-    image: ghcr.io/movim/movim_docker:latest
+    image: ghcr.io/movim/movim:latest
     #build:
     #  context: image/.
     #  dockerfile: Dockerfile.debian

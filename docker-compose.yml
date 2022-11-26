@@ -7,7 +7,7 @@ version: "3.7"
 services:
   movim:
     ### general settings
-    image: ghcr.io/movim/movim_docker:latest
+    image: ghcr.io/movim/movim:latest
     #build:
     #  context: image/.
     #  dockerfile: Dockerfile.debian
