@@ -14,15 +14,61 @@ Movim is a distributed social network built on top of XMPP, a popular open stand
 
 ![logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Movim-logo.svg/354px-Movim-logo.svg.png)
 
-# How to use this image
+# Image description and usage
 
-## ... via [`docker stack deploy`](https://docs.docker.com/engine/reference/commandline/stack_deploy/) or [`docker-compose`](https://github.com/docker/compose)
+* built for `x86-64` and `arm64`
+* runs as non-root user
+* does not require any Linux capabilities
+* built with `php8`
+* `s6-overlay` to manage the different processes
+* (is available also as an Alpine based image, which has an [issue](https://github.com/sando38/movim/issues/1), however)
 
-Example `stack.yml` for `movim`:
+## Tags
 
-```yaml
+The image name is `ghcr.io/movim/movim_docker`. Images are available from tag `v0.21rc3` onwards. The first image build has a `-r0` suffix. For older image versions, see [DockerHub](https://hub.docker.com/r/movim/movim).
+
+Experimental Alpine based images have an `-alpine` suffix.
+
+| Tags  | Description  | Additional notes  |
+| ------------ | ------------ | ------------ |
+| `v0.21rc3`, `latest`  | [Release changelog](https://github.com/movim/movim/blob/master/CHANGELOG.md)  |   |
+
+All images are based upon the official `php-fpm` docker images with latest OS (e.g. `Debian bullseye`).
+
+## Configuration (overview)
+
+The easiest way is to clone the repo:
+
+    git clone https://github.com/movim/movim_docker
+
+Afterwards, those two files need to be adjusted:
+
+* docker-compose.yml
+* movim.env
+
+If both have been adjusted, start the stack with:
+
+    docker compose up -d
+
+Movim starts [w/o any admins](https://github.com/movim/movim/blob/master/INSTALL.md#5-admin-panel). An admin could be defined with:
+
+    docker exec movim php daemon.php setAdmin {jid}
+
+### docker-compose.yml
+
+There are some aspects to double check:
+
+* Image build vs. pre-build image
+* `movim` security options
+* `postgresql` configuration
+* `nginx` configuration
+
+You need to decide wether to `build` the image yourself or to use the pre-build `image` (default). Either way, one of the parts must be commented:
+
+```yml
 services:
   movim:
+<<<<<<< HEAD
     environment:
       MOVIM_DOMAIN: http://localhost
       MOVIM_PORT: 8080
@@ -35,32 +81,58 @@ services:
     image: movim/movim:0.21rc3
     volumes:
     - ${PWD}/movim:/var/www/html:rw
+=======
+    ### general settings
+    image: ghcr.io/movim/movim_docker:latest
+    #build:
+    #  context: image/.
+    #  dockerfile: Dockerfile.debian
+    ...
+```
+>>>>>>> d53fa9c (Rework Docker image:)
 
-  nginx:
-    image: nginx:mainline-alpine
-    ports:
-    - published: 80
-      target: 80
-    volumes:
-    - ${PWD}/movim:/var/www/html:ro
-    - ${PWD}/nginx:/etc/nginx/conf.d:ro
+The image is designed to run without any privileges/ linux capabilities. If you want that, you can uncomment the following parts:
 
+```
+services:
+  movim:
+    ...
+    ### security options
+    read_only: true
+    #cap_drop: [ALL]
+    #security_opt:
+    #  - no-new-privileges:true
+    ...
+```
+
+Additionally, movim relies on a database server. It works with `postgresql` (recommended) or `mysql`/`mariadb`. If you run a database server already, you should comment the `postgresql` part of the `docker-compose.yml` file. If not, at least the `POSTGRES_PASSWORD` should be changed to something save. This password must be the same as provided to movim with the variable `DB_PASSWORD`, e.g. within the `movim.env` file.
+
+```yml
+  ...
   postgresql:
-    environment:
-      POSTGRES_DB: movim
-      POSTGRES_PASSWORD: changeme
-      POSTGRES_USER: movim
+    hostname: postgresql
+    container_name: postgresql
     image: postgres:14-alpine
-    volumes:
-    - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
-version: '3.8'
+    ...
 ```
-Please note, you'll need to create the `nginx/default.conf` file yourself, to be mounted into the `nginx` container. You can find a good example configuration [here](https://gist.githubusercontent.com/kawaii/468f24135bc5cf817b922d8491276771/raw/bc0a881c5a505ffa677655f515502533d33b7174/movim.conf).
 
-# Creating an Admin User
+Lastly, check the provided `nginx` configuration. Either you use an already existing webserver or this configuration. This repo also provides some [configuration examples](appdata/nginx) for nginx (w/ and w/o TLS). If TLS certificates are mounted into the container, the nginx user (`101:101`) should be able to read them.
 
-After you've sucessfully logged in to your Movim Pod, run the following Docker Compose exec command;
+### movim.env
 
-```
-docker-compose exec movim php daemon.php setAdmin example@movim.eu
-```
+This file contains the environment variables, which are read by movim during startup. Here is the link to the official installation document from the movim repository:
+
+[https://github.com/movim/movim/blob/master/INSTALL.md#2-dotenv-configuration](https://github.com/movim/movim/blob/master/INSTALL.md#2-dotenv-configuration)
+
+The `DB_PASSWORD` environment variable can also be exchanged with `DB_PASSWORD_FILE` which makes use of Docker secrets.
+
+## ToDos
+
+Potential ToDos for the future:
+
+* Fix Alpine container image
+* Integrate nginx into the movim image
+
+## Feedback
+
+Feel free to provide feedback. If there is an issue or anything, please use the issue tracker.

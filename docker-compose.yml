@@ -1,0 +1,88 @@
+version: "3.7"
+
+# secrets: # should be owned by movim user:group (9000:9000)
+#   db_password:
+#     file: /path/to/db_password
+
+services:
+  movim:
+    ### general settings
+    image: ghcr.io/movim/movim_docker:latest
+    #build:
+    #  context: image/.
+    #  dockerfile: Dockerfile.debian
+    hostname: movim
+    container_name: movim
+    restart: unless-stopped
+    depends_on:
+      - postgresql
+    user: 9000:9000
+
+    ### security options
+    read_only: true
+    #cap_drop: [ALL]
+    #security_opt:
+    #  - no-new-privileges:true
+
+    ### Environment variables
+    # environment:
+    #   - DAEMON_URL="localhost"
+    #   - DB_PASSWORD_FILE=/run/secrets/db_password
+    env_file:
+      - movim.env
+    # secrets:
+    #   - db_password
+
+    ### Volume mounts
+    volumes:
+      - movim:/movim
+
+  postgresql:
+    ### general settings
+    image: postgres:14-alpine
+    hostname: postgresql
+    container_name: postgresql
+    env_file:
+      - movim.env
+    volumes:
+      - database:/var/lib/postgresql/data:rw
+
+  nginx:
+    ### general settings
+    image: nginx:mainline-alpine
+    hostname: nginx
+    container_name: nginx
+    restart: unless-stopped
+    depends_on:
+      - movim
+    user: 101:101
+
+    ### security options
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+    ### networking options
+    ports:
+      - 80:80
+    #   - 443:443
+
+    ### Volume mounts
+    volumes:
+      - movim:/movim:ro
+      - ${PWD}/appdata/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${PWD}/appdata/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ### certs must be readable by the default nginx user 101:101
+    #   - /path/to/certs:/etc/nginx/tls
+
+    ### TempFS to enable read-only mode
+    tmpfs:
+      - /nginx/tmp
+      - /nginx/cache
+      - /nginx/logs 
+      - /nginx/run
+
+volumes:
+  database:
+  movim:

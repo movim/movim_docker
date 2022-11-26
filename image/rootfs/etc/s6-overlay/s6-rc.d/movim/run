@@ -1,0 +1,8 @@
+#!/command/with-contenv /bin/sh
+
+cd ${MOVIM_HOME}
+
+# start movim daemon
+## wait some seconds to have php up and running...
+sleep 5s
+/bin/sh -c "${MOVIM_HOME}/daemon.php start"

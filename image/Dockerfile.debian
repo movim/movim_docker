@@ -1,0 +1,76 @@
+# -------------- Build-time variables --------------
+ARG PHP_VERSION="8.0"
+# ---------------------------------------------------
+### Build PHP base
+FROM php:${PHP_VERSION}-fpm
+
+COPY --chown=9000:9000 rootfs /
+
+# BUILD: define build variables
+ARG MOVIM_REPO="https://github.com/movim/movim"
+ARG MOVIM_VERSION="v0.21rc3"
+ARG USER="movim-user"
+ARG UID="9000"
+ARG GID="9000"
+ARG S6_VERSION="v3.1.2.1"
+
+# RUNTIME: define environment variables
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
+       S6_CMD_WAIT_FOR_SERVICES_MAXTIME="0" \
+       S6_READ_ONLY_ROOT="1" \
+       MOVIM_HOME="/movim" \
+       MOVIM_VERSION="$MOVIM_VERSION"
+
+WORKDIR /tmp/builder
+
+RUN set -x && apt-get update && apt-get upgrade -y \
+# BUILD: add build dependencies
+       && apt-get install -qq --no-install-suggests --no-install-recommends \
+              $PHPIZE_DEPS \
+              curl \
+              git \
+              tar \
+              wget \
+       && curl -sSLf \
+              -o /usr/local/bin/install-php-extensions \
+              https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+       && chmod +x /usr/local/bin/install-php-extensions \
+       && install-php-extensions \
+              gd \
+              imagick \
+              mysqli \
+              pdo_mysql \
+              pdo_pgsql \
+              pgsql \
+              zip \
+# BUILD: download and install movim
+       && git clone ${MOVIM_REPO} --branch ${MOVIM_VERSION} --single-branch . \
+       && curl -sS https://getcomposer.org/installer | php \
+       && php composer.phar install --optimize-autoloader \
+       && mkdir -p ${MOVIM_HOME}/log ${MOVIM_HOME}/cache ${MOVIM_HOME}/public/cache \
+       && ln -s /usr/local/bin/php /usr/bin/php \
+# RUNTIME: add runtime group and user
+       && groupadd -g ${GID} ${USER} \
+       && useradd -d ${MOVIM_HOME} -m -g ${GID} -u ${UID} -s /sbin/nologin ${USER} \
+       && chown -R ${UID}:${GID} ${MOVIM_HOME} /tmp/builder \
+# RUNTIME: install runtime init (s6-overlay)
+       && ARCH=$(uname -m) \
+       && wget -qO - https://github.com/just-containers/s6-overlay/releases/download/$S6_VERSION/s6-overlay-noarch.tar.xz | tar xfJ - -C / \
+       && wget -qO - https://github.com/just-containers/s6-overlay/releases/download/$S6_VERSION/s6-overlay-$ARCH.tar.xz | tar xfJ - -C / \
+       && chmod +x /etc/cont-init.d/* /etc/s6-overlay/s6-rc.d/*/run \
+       && ln -s /run /var/run \
+# CLEANUP: Remove source files, build dependencies, etc.
+       && apt-get remove -y \
+              curl \
+              git \
+              wget \
+       && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+       && apt-get clean \
+       && rm -rf /usr/local/bin/install-php-extensions /var/lib/apt/lists/* /tmp/builder/.git*
+
+WORKDIR ${MOVIM_HOME}
+EXPOSE 8080 9000
+USER ${USER}
+VOLUME ["${MOVIM_HOME}", "/php", "/run", "/tmp"]
+
+ENTRYPOINT ["/init"]
