@@ -1,5 +1,22 @@
 #!/command/with-contenv /bin/sh
 
+cd $MOVIM_HOME
+
+copy_movim ()
+{
+	cd /tmp/builder
+	tar cf - * | ( cd $MOVIM_HOME; tar xfp -)
+	echo >&2 "Complete! Movim ${MOVIM_VERSION} has been successfully copied to $MOVIM_HOME"
+	cd $MOVIM_HOME
+	echo "$MOVIM_VERSION" > CTR_TAG
+	# cleanup build files
+	rm -rf /tmp/*
+}
+
+if [ ! -f CTR_TAG ] && [ -f VERSION ]; then
+	echo "$(cat VERSION)" > CTR_TAG
+fi
+
 # copy image's movim version into workdir
 if ! [ -e daemon.php -a -e public/index.php ]; then
 	echo >&2 "Movim not found in $MOVIM_HOME - copying now..."
@@ -7,12 +24,13 @@ if ! [ -e daemon.php -a -e public/index.php ]; then
 		echo >&2 "WARNING: $MOVIM_HOME is not empty - press Ctrl+C now if this is an error!"
 		( set -x; ls -A; sleep 10 )
 	fi
-	cd /tmp/builder
-	tar cf - * | ( cd $MOVIM_HOME; tar xfp -)
-	echo >&2 "Complete! Movim ${MOVIM_VERSION} has been successfully copied to $MOVIM_HOME"
-	cd $MOVIM_HOME
-	# cleanup build files
-	rm -rf /tmp/*
+	copy_movim
+elif ! [ "$MOVIM_VERSION" = $(cat CTR_TAG) ]; then
+	echo >&2 "Image version $MOVIM_VERSION does not equal version $(cat CTR_TAG) found in $MOVIM_HOME"
+	echo >&2 "- press Ctrl+C now to prevent overriding!"
+	sleep 10
+	echo >&2 "- overriding now..."
+	copy_movim
 fi
 
 # check if password is a "file" or variable
