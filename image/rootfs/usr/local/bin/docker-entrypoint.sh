@@ -1,10 +1,10 @@
-#!/command/with-contenv /bin/sh
+#!/bin/sh
 
 cd $MOVIM_HOME
 
 copy_movim ()
 {
-	cd /tmp/movim-$(echo $MOVIM_VERSION | sed -e 's|v||') 
+	cd /tmp/movim
 	tar cf - * | ( cd $MOVIM_HOME; tar xfp -)
 	echo >&2 "Complete! Movim ${MOVIM_VERSION} has been successfully copied to $MOVIM_HOME"
 	cd $MOVIM_HOME
@@ -87,3 +87,9 @@ EOT
 
 ### initialize movim
 php vendor/bin/phinx migrate
+
+php-fpm --daemonize
+
+sleep 5
+
+exec "$@"

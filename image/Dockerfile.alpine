@@ -46,6 +46,7 @@ RUN set -x && apk -U upgrade --available --no-cache \
               libpq \
               libwebp \
               libzip \
+              tini \
               zlib \
 # BUILD: build and install php extensions
        && docker-php-ext-configure gd --with-jpeg --with-webp \
@@ -62,21 +63,17 @@ RUN set -x && apk -U upgrade --available --no-cache \
        && curl -o movim.tar.gz -fSL "${MOVIM_SOURCE}/archive/${MOVIM_VERSION}.tar.gz" \
        && echo "$MOVIM_SHA512 *movim.tar.gz" | sha512sum -c - \
        && tar -xzf movim.tar.gz -C /tmp \
-       && cd /tmp/movim-$(echo $MOVIM_VERSION | sed -e 's|v||') \
+       && mv /tmp/movim-* /tmp/movim \
+       && cd /tmp/movim \
        && curl -sS https://getcomposer.org/installer | php \
        && php composer.phar install --optimize-autoloader \
        && mkdir -p ${MOVIM_HOME}/log ${MOVIM_HOME}/cache ${MOVIM_HOME}/public/cache \
        && ln -s /usr/local/bin/php /usr/bin/php \
+       && chmod +x /usr/local/bin/* \
 # RUNTIME: add runtime group and user
        && addgroup ${USER} -g ${GID} \
        && adduser -s /sbin/nologin -G ${USER} -u ${UID} -D -h ${MOVIM_HOME} --gecos "" ${USER} \
-       && chown -R ${UID}:${GID} ${MOVIM_HOME} /tmp/builder \
-# RUNTIME: install runtime init (s6-overlay)
-       && ARCH=$(uname -m) \
-       && wget -qO - https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-noarch.tar.xz | tar xfJ - -C / \
-       && wget -qO - https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${ARCH}.tar.xz | tar xfJ - -C / \
-       && chmod +x /etc/cont-init.d/* /etc/s6-overlay/s6-rc.d/*/run \
-       && ln -s /run /var/run \
+       && chown -R ${UID}:${GID} ${MOVIM_HOME} /tmp/movim \
 # CLEANUP: Remove source files, build dependencies, etc.
        && apk del build-deps \
        && rm -rf /var/cache/apk/* /tmp/pear /tmp/builder
@@ -84,7 +81,7 @@ RUN set -x && apk -U upgrade --available --no-cache \
 WORKDIR ${MOVIM_HOME}
 EXPOSE 8080 9000
 USER ${USER}
-VOLUME ["${MOVIM_HOME}", "/php", "/run", "/tmp"]
+VOLUME ["${MOVIM_HOME}"]
 
-ENTRYPOINT ["/init"]
-
+ENTRYPOINT ["/sbin/tini","--","docker-entrypoint.sh"]
+CMD ["/movim/daemon.php", "start"]
