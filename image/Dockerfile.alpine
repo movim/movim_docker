@@ -8,8 +8,9 @@ FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
 COPY --chown=9000:9000 rootfs /
 
 # BUILD: define build variables
-ARG MOVIM_REPO="https://github.com/movim/movim"
+ARG MOVIM_SOURCE="https://github.com/movim/movim"
 ARG MOVIM_VERSION="v0.21rc3"
+ARG MOVIM_SHA512="fce19e38321a40dec0829cbc18d15b7540558c1f7f2bbbbeeadddf4b7eb81cacc48dbf1a187140ba2a7970258204c9073b60209910e5839b61932d2d5668b02a"
 ARG USER="movim-user"
 ARG UID="9000"
 ARG GID="9000"
@@ -58,7 +59,10 @@ RUN set -x && apk -U upgrade --available --no-cache \
         && pecl install imagick \
         && echo 'extension=imagick.so' > /usr/local/etc/php/conf.d/imagick.ini \
 # BUILD: download and install movim
-       && git clone ${MOVIM_REPO} --branch ${MOVIM_VERSION} --single-branch . \
+       && curl -o movim.tar.gz -fSL "${MOVIM_SOURCE}/archive/${MOVIM_VERSION}.tar.gz" \
+       && echo "$MOVIM_SHA512 *movim.tar.gz" | sha512sum -c - \
+       && tar -xzf movim.tar.gz -C /tmp \
+       && cd /tmp/movim-$(echo $MOVIM_VERSION | sed -e 's|v||') \
        && curl -sS https://getcomposer.org/installer | php \
        && php composer.phar install --optimize-autoloader \
        && mkdir -p ${MOVIM_HOME}/log ${MOVIM_HOME}/cache ${MOVIM_HOME}/public/cache \
@@ -75,7 +79,7 @@ RUN set -x && apk -U upgrade --available --no-cache \
        && ln -s /run /var/run \
 # CLEANUP: Remove source files, build dependencies, etc.
        && apk del build-deps \
-       && rm -rf /var/cache/apk/* /tmp/pear /tmp/builder/.git*
+       && rm -rf /var/cache/apk/* /tmp/pear /tmp/builder
 
 WORKDIR ${MOVIM_HOME}
 EXPOSE 8080 9000
