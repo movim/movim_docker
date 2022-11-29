@@ -50,7 +50,7 @@ services:
       POSTGRES_DB: movim
       POSTGRES_PASSWORD: changeme
       POSTGRES_USER: movim
-    image: postgres:14-alpine
+    image: postgres:15-alpine
     volumes:
     - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
 version: '3.8'
