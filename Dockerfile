@@ -39,8 +39,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.21rc3
-ENV MOVIM_SHA512 fce19e38321a40dec0829cbc18d15b7540558c1f7f2bbbbeeadddf4b7eb81cacc48dbf1a187140ba2a7970258204c9073b60209910e5839b61932d2d5668b02a
+ENV MOVIM_VERSION 0.21rc6
+ENV MOVIM_SHA512 5f8732950626db3f6ab723054b1ec4cde9cd790e5fcc05b6f5a7cf6d2f1544a4bb4610ca3ba9b2cc92c7c3326823a68d26bd0b7cac208e076d24572eeb625310
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
