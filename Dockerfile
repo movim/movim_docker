@@ -39,8 +39,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.21rc6
-ENV MOVIM_SHA512 5f8732950626db3f6ab723054b1ec4cde9cd790e5fcc05b6f5a7cf6d2f1544a4bb4610ca3ba9b2cc92c7c3326823a68d26bd0b7cac208e076d24572eeb625310
+ENV MOVIM_VERSION 0.21rc11
+ENV MOVIM_SHA512 9b7ffc60b3f2b9fdfb740df449e86dee29b04576e0c19bae2ea4558f7286622a27cd957a32dbc71636a51d6a5ec6536003854307b5787b794e6f6dfa3eeb66c2
 
 RUN set -ex; \
 	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
@@ -59,4 +59,4 @@ WORKDIR /var/www/html
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD ["su", "-s", "/bin/sh", "-c", "php daemon.php start --url=$MOVIM_DOMAIN --port=$MOVIM_PORT --interface=$MOVIM_INTERFACE --verbose --debug", "www-data"]
+CMD ["su", "-s", "/bin/sh", "-c", "php daemon.php start", "www-data"]

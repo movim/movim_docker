@@ -24,15 +24,16 @@ Example `stack.yml` for `movim`:
 services:
   movim:
     environment:
-      MOVIM_DOMAIN: http://localhost
-      MOVIM_PORT: 8080
-      MOVIM_INTERFACE: 0.0.0.0
-      POSTGRES_DB: movim
-      POSTGRES_HOST: postgresql
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: movim
-      POSTGRES_PASSWORD: changeme
-    image: movim/movim:0.21rc3
+      DAEMON_URL: http://localhost
+      DAEMON_PORT: 8080
+      DAEMON_INTERFACE: 127.0.0.1
+      DB_DRIVER: pgsql
+      DB_HOST: postgresql
+      DB_PORT: 5432
+      DB_DATABASE: movim
+      DB_USERNAME: movim
+      DB_PASSWORD: changeme
+    image: movim/movim:0.21rc11
     volumes:
     - ${PWD}/movim:/var/www/html:rw
 

@@ -11,18 +11,6 @@ if ! [ -e daemon.php -a -e public/index.php ]; then
 	echo >&2 "Complete! Movim ${MOVIM_VERSION} has been successfully copied to $PWD"
 fi
 
-cat <<EOT > config/db.inc.php
-<?php
-\$conf = [
-    'type'        => 'pgsql',
-    'database'    => '$POSTGRES_DB',
-    'host'        => '$POSTGRES_HOST',
-    'port'        => '$POSTGRES_PORT',
-    'username'    => '$POSTGRES_USER',
-    'password'    => '$POSTGRES_PASSWORD',
-];
-EOT
-
 chown -R www-data:www-data $PWD && chmod -R u+rwx $PWD
 
 php vendor/bin/phinx migrate
