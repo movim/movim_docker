@@ -39,20 +39,26 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV MOVIM_VERSION 0.21rc11
-ENV MOVIM_SHA512 9b7ffc60b3f2b9fdfb740df449e86dee29b04576e0c19bae2ea4558f7286622a27cd957a32dbc71636a51d6a5ec6536003854307b5787b794e6f6dfa3eeb66c2
+ARG MOVIM_VERSION=0.21rc11 \
+		MOVIM_SHA512=9b7ffc60b3f2b9fdfb740df449e86dee29b04576e0c19bae2ea4558f7286622a27cd957a32dbc71636a51d6a5ec6536003854307b5787b794e6f6dfa3eeb66c2
 
 RUN set -ex; \
-	curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
-	echo "$MOVIM_SHA512 *movim.tar.gz" | sha512sum -c -; \
-	tar -xzf movim.tar.gz -C /usr/src/; \
-	rm movim.tar.gz; \
-	chown -R www-data:www-data /usr/src/movim-${MOVIM_VERSION}
+        if [ "$MOVIM_VERSION" = "master" ]; then \
+                curl -Lo movim-$MOVIM_VERSION.zip https://github.com/movim/movim/archive/refs/heads/master.zip; \
+								unzip -d /usr/src/ movim-$MOVIM_VERSION.zip; \
+								chown -R www-data:www-data /usr/src/movim-${MOVIM_VERSION};\
+        else \
+                curl -o movim.tar.gz -fSL "https://github.com/movim/movim/archive/v${MOVIM_VERSION}.tar.gz"; \
+                echo "$MOVIM_SHA512 *movim.tar.gz" | sha512sum -c -; \
+                tar -xzf movim.tar.gz -C /usr/src/; \
+                rm movim.tar.gz; \
+								chown -R www-data:www-data /usr/src/movim-${MOVIM_VERSION};\
+        fi
 
-WORKDIR /usr/src/movim-${MOVIM_VERSION}
-
-RUN curl -sS https://getcomposer.org/installer | php \
+RUN cd /usr/src/movim-${MOVIM_VERSION} && \
+		curl -sS https://getcomposer.org/installer | php \
     && php composer.phar install --optimize-autoloader
+		
 
 WORKDIR /var/www/html
 
