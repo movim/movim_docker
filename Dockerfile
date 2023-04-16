@@ -42,6 +42,9 @@ VOLUME /var/www/html
 ARG MOVIM_VERSION=0.21rc11 \
 		MOVIM_SHA512=9b7ffc60b3f2b9fdfb740df449e86dee29b04576e0c19bae2ea4558f7286622a27cd957a32dbc71636a51d6a5ec6536003854307b5787b794e6f6dfa3eeb66c2
 
+ENV MOVIM_VERSION=${MOVIM_VERSION} \
+		MOVIM_SHA512=${MOVIM_SHA512}
+
 RUN set -ex; \
         if [ "$MOVIM_VERSION" = "master" ]; then \
                 curl -Lo movim-$MOVIM_VERSION.zip https://github.com/movim/movim/archive/refs/heads/master.zip; \
