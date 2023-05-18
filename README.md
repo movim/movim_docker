@@ -33,7 +33,7 @@ services:
       DB_DATABASE: movim
       DB_USERNAME: movim
       DB_PASSWORD: changeme
-    image: movim/movim:0.21rc11
+    image: movim/movim:0.21.1
     volumes:
     - ${PWD}/movim:/var/www/html:rw
 

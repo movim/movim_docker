@@ -11,6 +11,8 @@ if ! [ -e daemon.php -a -e public/index.php ]; then
 	echo >&2 "Complete! Movim ${MOVIM_VERSION} has been successfully copied to $PWD"
 fi
 
+mkdir -p cache/ log/ public/cache/
+
 chown -R www-data:www-data $PWD && chmod -R u+rwx $PWD
 
 php vendor/bin/phinx migrate
