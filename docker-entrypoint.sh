@@ -11,6 +11,23 @@ if ! [ -e daemon.php -a -e public/index.php ]; then
 	echo >&2 "Complete! Movim ${MOVIM_VERSION} has been successfully copied to $PWD"
 fi
 
+# read secrets defined as 'Docker secrets'
+secrets_variables='/tmp/variables'
+for i in $(env | grep '__FILE')
+do
+        var_name="$(echo "$i" | sed -e 's|__FILE=| |' | awk '{print $1}')"
+        var_file="$(echo "$i" | sed -e 's|__FILE=| |' | awk '{print $2}')"
+        echo "$var_name=$(cat $var_file)" >> "$secrets_variables"
+done
+
+if [ -f "$secrets_variables" ]
+then
+        set -a
+        source "$secrets_variables"
+        set +a
+        rm "$secrets_variables"
+fi
+
 mkdir -p cache/ log/ public/cache/
 
 chown -R www-data:www-data $PWD && chmod -R u+rwx $PWD
