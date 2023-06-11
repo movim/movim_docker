@@ -26,7 +26,7 @@ services:
     environment:
       DAEMON_URL: http://localhost
       DAEMON_PORT: 8080
-      DAEMON_INTERFACE: 127.0.0.1
+      DAEMON_INTERFACE: 0.0.0.0
       DB_DRIVER: pgsql
       DB_HOST: postgresql
       DB_PORT: 5432
