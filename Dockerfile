@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 RUN set -ex; \
 	\
@@ -23,19 +23,31 @@ RUN set -ex; \
 	\
 	pecl install imagick-3.7.0; \
 	docker-php-ext-enable imagick; \
+	rm -r /tmp/pear; \
 	\
+	out="$(php -r 'exit(0);')"; \
+	[ -z "$out" ]; \
+	err="$(php -r 'exit(0);' 3>&1 1>&2 2>&3)"; \
+	[ -z "$err" ]; \
+	\
+	extDir="$(php -r 'echo ini_get("extension_dir");')"; \
+	[ -d "$extDir" ]; \
 	apt-mark auto '.*' > /dev/null; \
 	apt-mark manual $savedAptMark; \
-	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
-		| awk '/=>/ { print $3 }' \
+	ldd "$extDir"/*.so \
+		| awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); print so }' \
 		| sort -u \
-		| xargs -r dpkg-query -S \
+		| xargs -r dpkg-query --search \
 		| cut -d: -f1 \
 		| sort -u \
 		| xargs -rt apt-mark manual; \
 	\
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-	rm -rf /var/lib/apt/lists/*
+	rm -rf /var/lib/apt/lists/*; \
+	\
+	! { ldd "$extDir"/*.so | grep 'not found'; }; \
+	err="$(php --version 3>&1 1>&2 2>&3)"; \
+	[ -z "$err" ]
 
 RUN { \
 		echo 'opcache.memory_consumption=128'; \
@@ -48,8 +60,8 @@ RUN { \
 
 VOLUME /var/www/html
 
-ARG MOVIM_VERSION=0.21.1
-ARG MOVIM_SHA512=53996bb9148edaf0a1c7de1bef3dc9bee1b46105f21a00fc53432a4fdc201914a1e4c58ca90af27f94edab9829b8b424b45cb41ee85815a0a8541cae190ee44d
+ARG MOVIM_VERSION=0.22
+ARG MOVIM_SHA512=42b310fcd9fab2390cbf9ab9f976ab14ec758194743ff716d62b5f5ac0a9ee87ff21bfa61b9cfcc0db650c63add7c914ffee6de8c06a8ff27d0290b9c89cce32
 
 ENV MOVIM_VERSION=${MOVIM_VERSION}
 
